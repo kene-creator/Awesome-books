@@ -1,5 +1,6 @@
 const removeBtn = document.createElement('button');
 const addbtn = document.querySelector('.book__add-btn');
+const form = document.querySelector('.book__add');
 const bookTitle = document.querySelector('.book__title');
 const bookOwner = document.querySelector('.book__owner');
 const book = document.querySelector('.book');
@@ -7,78 +8,62 @@ const bookAuthor = document.getElementsByClassName('book__author');
 const bookName = document.getElementsByClassName('book__name');
 const bookItem = document.querySelector('.book__item');
 
-const bookDisplay = [];
-const bookList = [];
+// const bookDisplay = [];
+// const bookList = [];
 
-window.addEventListener('load', () => {
-  bookTitle.value = '';
-  bookOwner.value = '';
-  book.innerHTML = bookDisplay
+// let data = JSON.parse(localStorage.getItem('storageBooksData'))
+//   ? JSON.parse(localStorage.getItem('storageBooksData'))
+//   : [];
+
+let books;
+if (localStorage.getItem('books') === null) {
+  books = [];
+} else {
+  books = JSON.parse(localStorage.getItem('books'));
+}
+
+function createBooks() {
+  const displayBooks = books
     .map(
-      (bookList, i) => ` <div class="book__list">
-        <p class="book__name">${bookList.title}</p>
-       <p class="book__author">${bookList.author}</p>
-      <button type="button" class="book__remove" id=book-${i}>Remove</button></div>
-      `
-    )
-    .join('');
-  const list = document.getElementsByClassName('book__list');
-  const removeBtn = document.querySelectorAll('.book__remove');
-  removeBtn.forEach((element, i) =>
-    element.addEventListener('click', function (e) {
-      // localStorage.clear();
-      localStorage.removeItem('data', i);
-      localStorage.key(i - 1);
-      bookDisplay.splice(i, 1);
-      bookList.splice(i, 1);
-      list[i].innerHTML = '';
-    })
-  );
-});
-
-addbtn.addEventListener('click', (e) => {
-  e.preventDefault();
-
-  const bookInfo = {
-    title: bookTitle.value,
-    author: bookOwner.value,
-  };
-
-  bookList.push(bookInfo, ...bookDisplay);
-
-  localStorage.setItem('data', JSON.stringify(bookList));
-
-  console.log(bookList);
-
-  const displayBooks = bookList
-    .map(
-      (bookList, i) => ` <div class="book__list">
-          <p class="book__name">${bookList.title}</p>
-         <p class="book__author">${bookList.author}</p>
-        <button type="button" class="book__remove" id=book-${i}>Remove</button></div>
-        `
+      (
+        bookList
+      ) => `<div id="remove"><p class="book__name">${bookList.title}</p>
+<p class="author-name">${bookList.author}</p>
+<button type="button" onclick="delBook(${bookList.id})" class="book__remove">Remove</button><hr></div>
+`
     )
     .join('');
   book.innerHTML = displayBooks;
-
-  bookTitle.value = '';
-  bookOwner.value = '';
-
-  const list = document.getElementsByClassName('book__list');
-  const removeBtn = document.querySelectorAll('.book__remove');
-  removeBtn.forEach((element, i) =>
-    element.addEventListener('click', function (e) {
-      // localStorage.clear();
-      localStorage.removeItem('data', i);
-      bookDisplay.splice(i, 1);
-      bookList.splice(i, 1);
-      list[i].innerHTML = '';
-    })
-  );
+}
+document.addEventListener('DOMContentLoaded', () => {
+  createBooks();
 });
 
-const bookData = JSON.parse(localStorage.getItem('data'));
-bookDisplay.push(...bookData);
-console.log(bookData);
-console.log(bookDisplay);
-// console.log(JSON.parse(localStorage.getItem('data')));
+function sendToLocal(a, b) {
+  localStorage.setItem(a, JSON.stringify(b));
+  createBooks();
+}
+
+function addBook(bookItem) {
+  books.push(bookItem);
+  sendToLocal('storageBooksData', books);
+}
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const bookObject = {
+    id: books.length,
+    title: bookTitle.value,
+    author: bookOwner.value,
+  };
+  addBook(bookObject);
+  bookTitle.value = '';
+  bookOwner.value = '';
+});
+
+// eslint-disable-next-line no-unused-vars
+function delBook(id) {
+  const filteredBooks = books.filter((item) => item.id !== id);
+  bookData = filteredBooks;
+  sendToLocal('storageBooksData', filteredBooks);
+}
