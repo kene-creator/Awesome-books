@@ -2,13 +2,13 @@
 
 # Project Name
 
-> Capstone Project
+> Awesome books
 
 ## Built With
 
 - HTML
 - CSS
-- SCSS
+- Javascript
 
 ## Live Demo (if available)
 
