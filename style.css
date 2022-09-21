@@ -1,3 +1,64 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px auto;
+}
+
+.book__add {
+  display: flex;
+  flex-direction: column;
+}
+
+.book__title {
+  padding: 5px 30px 5px 10px;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+.book__owner {
+  padding: 5px 30px 5px 10px;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.book__add-btn {
+  width: 30%;
+  align-self: flex-end;
+}
+
+.books {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.book {
+  width: 100%;
+  margin: 60px 0;
+}
+
+.book__list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.book__remove {
+  padding: 5px 8px;
+  border: none;
+  height: 30px;
+  background-color: orangered;
+  cursor: pointer;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
 .hidden {
   opacity: 0;
 }
