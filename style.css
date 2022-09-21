@@ -8,6 +8,7 @@
 .book__add {
   display: flex;
   flex-direction: column;
+  width: 50%;
 }
 
 .book__title {
@@ -15,10 +16,31 @@
   margin-bottom: 10px;
   font-size: 15px;
 }
+
 .book__owner {
   padding: 5px 30px 5px 10px;
   font-size: 15px;
   margin-bottom: 10px;
+}
+
+.book__name {
+  margin-left: 30px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.by {
+  margin-left: 10px;
+}
+
+.book__info {
+  display: flex;
+}
+
+.book__author {
+  font-size: 20px;
+  font-weight: 700;
+  margin-left: 20px;
 }
 
 .book__add-btn {
@@ -27,7 +49,7 @@
 }
 
 .books {
-  width: 30%;
+  width: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -37,26 +59,40 @@
 .book {
   width: 100%;
   margin: 60px 0;
+  border: 2px solid #121212;
 }
 
 .book__list {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  overflow: hidden;
   width: 100%;
 }
 
 .book__remove {
+  margin-right: 30px;
   padding: 5px 8px;
   border: none;
   height: 30px;
-  background-color: orangered;
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px,
+    rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
+    rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
   cursor: pointer;
   border-radius: 10px;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   -ms-border-radius: 10px;
   -o-border-radius: 10px;
+}
+
+.bg-white {
+  background-color: rgb(240, 244, 244);
+}
+
+.bg-dark {
+  background-color: darkgray;
 }
 
 .hidden {

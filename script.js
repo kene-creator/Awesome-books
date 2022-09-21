@@ -1,130 +1,29 @@
-const removeBtn = document.createElement('button');
-const addbtn = document.querySelector('.book__add-btn');
-const bookTitle = document.querySelector('.book__title');
-const bookOwner = document.querySelector('.book__owner');
-const book = document.querySelector('.book');
-const bookAuthor = document.getElementsByClassName('book__author');
-const bookName = document.getElementsByClassName('book__name');
-const bookItem = document.querySelector('.book__item');
-
-// let books;
-// if (localStorage.getItem('books') === null) {
-//   books = [];
-// } else {
-//   books = JSON.parse(localStorage.getItem('books'));
-// }
-
-// document.querySelector('.book__add').addEventListener('click', function (e) {
-//   e.preventDefault();
-// });
-
-// window.addEventListener('load', (e) => {
-//   e.preventDefault();
-//   const data = [...JSON.parse(localStorage.getItem('storageBooksData'))];
-//   bookTitle.value = '';
-//   bookOwner.value = '';
-//   if (data.length > 0) {
-//     book.innerHTML = data
-//       .map(
-//         (bookList, i) => ` <div class="book__list">
-//         <p class="book__name">${bookList.title}</p>
-//        <p class="book__author">${bookList.author}</p>
-//       <button type="button" class="book__remove" id=book-${i}>Remove</button></div>
-//       `
-//       )
-//       .join('');
-//   }
-
-//   const list = document.getElementsByClassName('book__list');
-//   const removeBtn = document.querySelectorAll('.book__remove');
-//   removeBtn.forEach((element, i) =>
-//     element.addEventListener('click', function (e) {
-//       delBook(i);
-//       list[i].innerHTML = '';
-//     })
-//   );
-// });
-
-// addbtn.addEventListener('click', (e) => {
-//   e.preventDefault();
-
-//   const bookInfo = {
-//     title: bookTitle.value,
-//     author: bookOwner.value,
-//     id: books.length,
-//   };
-
-//   books.push(bookInfo);
-
-//   sendToLocal('storageBooksData', books);
-
-//   const displayBooks = books
-//     .map(
-//       (bookList, i) => ` <div class="book__list">
-//           <p class="book__name">${bookList.title}</p>
-//          <p class="book__author">${bookList.author}</p>
-//         <button type="button" class="book__remove" id=book-${i}>Remove</button></div>
-//         `
-//     )
-//     .join('');
-//   book.innerHTML = displayBooks;
-
-//   bookTitle.value = '';
-//   bookOwner.value = '';
-
-//   const list = document.getElementsByClassName('book__list');
-//   const removeBtn = document.querySelectorAll('.book__remove');
-//   removeBtn.forEach((element, i) =>
-//     element.addEventListener('click', function (e) {
-//       delBook(i);
-//       list[i].innerHTML = '';
-//     })
-//   );
-// });
-
-// function delBook(id) {
-//   const filteredBooks = books.filter((item) => item.id !== id);
-//   books = filteredBooks;
-//   sendToLocal('storageBooksData', filteredBooks);
-// }
-
-// function sendToLocal(a, b) {
-//   localStorage.setItem(a, JSON.stringify(b));
-// }
-
 class Store {
-  static getBooks() {
+  getBooks() {
     let books;
-    if (localStorage.getItem('books') === null) {
+    if (localStorage.getItem('storageBooksData') === null) {
       books = [];
     } else {
-      books = JSON.parse(localStorage.getItem('books'));
+      books = JSON.parse(localStorage.getItem('storageBooksData'));
     }
 
     return books;
   }
 
-  static addBook(book) {
-    const books = Store.getBooks();
-    books.push(book);
-    localStorage.setItem('books', JSON.stringify(books));
-  }
-
-  static removeBook(isbn) {
-    const books = Store.getBooks();
+  removeBook(id) {
+    const books = this.getBooks();
 
     books.forEach((book, index) => {
-      if (book.isbn === isbn) {
+      if (book.id === id) {
         books.splice(index, 1);
       }
     });
 
-    localStorage.setItem('books', JSON.stringify(books));
+    localStorage.setItem('storageBooksData', JSON.stringify(books));
   }
 }
 
 class Book {
-  // _books = [];
   _parentElement = document.querySelector('.books');
   _btnElement = document.querySelector('.book__add-btn');
   _bookContainer = document.querySelector('.book');
@@ -151,21 +50,30 @@ class Book {
     return (this._books = filteredBooks);
   }
 
+  background() {
+    this._books.map((n) => {
+      n % 2 === 0
+        ? (document.getElementsByClassName('book__list').style.backgroundolor =
+            'white')
+        : (document.getElementsByClassName('book__list').style.backgroundColor =
+            'black');
+    });
+  }
+
   addBooks() {
     this._btnElement.addEventListener('click', (e) => {
       e.preventDefault();
 
       const bookInfo = {
-        title: bookTitle.value,
-        author: bookOwner.value,
+        title: this._bookTitle.value,
+        author: this._bookOwner.value,
+        bgColor: this._books.length % 2 === 0 ? 'bg-white' : 'bg-dark',
         id: this._books.length,
       };
 
       this._books.push(bookInfo);
 
       this.sendToLocal('storageBooksData', this._books);
-
-      console.log(this._books);
 
       const displayBooks = this._books.map(this._generateMarkup).join('');
       this._bookContainer.innerHTML = displayBooks;
@@ -174,20 +82,24 @@ class Book {
 
       const list = document.getElementsByClassName('book__list');
       const removeBtn = document.querySelectorAll('.book__remove');
+
       removeBtn.forEach((element, i) =>
         element.addEventListener('click', function () {
-          console.log(i);
-          // this._delBook(i);
           list[i].innerHTML = '';
+          const rem = new Store();
+          rem.removeBook(i);
         })
       );
     });
   }
 
   _generateMarkup(bookList, i) {
-    return ` <div class="book__list">
-    <p class="book__name">${bookList.title}</p>
+    return ` <div class="book__list ${bookList.bgColor}">
+    <div class="book__info">
+    <p class="book__name">${bookList.title} <span class="by">by</span></p>
    <p class="book__author">${bookList.author}</p>
+    </div>
+    
   <button type="button" class="book__remove" id=book-${i}>Remove</button></div>
   `;
   }
@@ -195,18 +107,24 @@ class Book {
   _refreshBookList() {
     window.addEventListener('load', (e) => {
       e.preventDefault();
-      const data = [...JSON.parse(localStorage.getItem('storageBooksData'))];
+
+      const get = new Store();
       this._getValue();
-      if (data.length > 0) {
-        book.innerHTML = data.map(this._generateMarkup).join('');
+      if (get.getBooks().length > 0) {
+        this._bookContainer.innerHTML = get
+          .getBooks()
+          .map(this._generateMarkup)
+          .join('');
       }
 
       const list = document.getElementsByClassName('book__list');
       const removeBtn = document.querySelectorAll('.book__remove');
+
       removeBtn.forEach((element, i) =>
-        element.addEventListener('click', function (e) {
-          // this._delBook(i);
+        element.addEventListener('click', function () {
           list[i].innerHTML = '';
+          const rem = new Store();
+          rem.removeBook(i);
         })
       );
     });
@@ -216,4 +134,3 @@ class Book {
 const displayBooks = new Book();
 displayBooks.addBooks();
 displayBooks._refreshBookList();
-console.log(displayBooks._books);
