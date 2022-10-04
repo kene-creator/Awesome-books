@@ -7,14 +7,11 @@
 ## Built With
 
 - HTML
-- CSS
 - Javascript
 
 ## Live Demo (if available)
 
-[Live Demo Link](https://kene-creator.github.io/Career-Development-Summit/)
-
-[Live Presentation Link](https://www.loom.com/share/c73569a300564b518fce53512cedb469)
+[Live Demo Link](https://kene-creator.github.io/Awesome-books/)
 
 ## Getting Started
 
@@ -22,10 +19,10 @@
 
 ### Install
 
--Webhint
--StyleLint
--eslint
--node-sass
+- Webhint
+- StyleLint
+- eslint
+- node-sass
 
 ## Authors
 
